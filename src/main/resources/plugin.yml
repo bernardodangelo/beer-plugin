@@ -1,0 +1,4 @@
+name: Beer
+version: '${project.version}'
+main: com.bernardo.beer
+api-version: '1.20'
