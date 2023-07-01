@@ -44,9 +44,9 @@ public final class beer extends JavaPlugin implements Listener {
         if (item != null && item.getType() == Material.POTION && item.getItemMeta().hasDisplayName() &&
                 item.getItemMeta().getDisplayName().equals("Cerveja")) {
             Player player = event.getPlayer();
-            player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 7 * 20, 0));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 7 * 20, 0));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 3 * 20, 0));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 14 * 20, 2));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 14 * 20, 0));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10 * 20, 0));
         }
     }
 
