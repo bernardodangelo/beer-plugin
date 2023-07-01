@@ -1,5 +1,6 @@
 package com.bernardo;
 
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -10,11 +11,13 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public final class Beer extends JavaPlugin implements Listener {
+public final class beer extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
@@ -49,10 +52,17 @@ public final class Beer extends JavaPlugin implements Listener {
 
     private ItemStack createBeerItem() {
         ItemStack beer = new ItemStack(Material.POTION);
+        PotionMeta potionMeta = (PotionMeta) beer.getItemMeta();
+        potionMeta.setColor(Color.YELLOW);
+        potionMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+        beer.setItemMeta(potionMeta);
         ItemMeta meta = beer.getItemMeta();
         meta.setDisplayName("Cerveja");
-        meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
         beer.setItemMeta(meta);
         return beer;
+    }
+
+    private PotionEffect createPotionEffect(PotionEffectType type, int duration) {
+        return new PotionEffect(type, duration, 0, false, false);
     }
 }
