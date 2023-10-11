@@ -1,4 +1,8 @@
 name: Beer
+description: Um plugin que adiciona Cerveja ao jogo.
+authors:
+  - Bernado
+  - Jhefferson
 version: '${project.version}'
 main: com.bernardo.beer
 api-version: '1.20'
