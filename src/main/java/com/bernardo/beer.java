@@ -13,8 +13,11 @@ import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import java.util.Arrays;
 
 public final class beer extends JavaPlugin implements Listener {
 
@@ -23,12 +26,13 @@ public final class beer extends JavaPlugin implements Listener {
         getLogger().info("BeerPlugin has been enabled.");
         getServer().getPluginManager().registerEvents(this, this);
 
-        ItemStack beer = createBeerItem();
         NamespacedKey beerKey = new NamespacedKey(this, "beer_recipe");
+        ItemStack beer = createBeerItem(beerKey);
         ShapelessRecipe beerRecipe = new ShapelessRecipe(beerKey, beer);
         beerRecipe.addIngredient(Material.POTION);
         beerRecipe.addIngredient(Material.WHEAT);
         beerRecipe.addIngredient(Material.FERMENTED_SPIDER_EYE);
+        getServer().addRecipe(beerRecipe);
     }
 
     @Override
@@ -39,28 +43,30 @@ public final class beer extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerDrink(PlayerItemConsumeEvent event) {
         ItemStack item = event.getItem();
-        if (item.getType() == Material.POTION && item.getItemMeta().hasDisplayName() &&
-                item.getItemMeta().getDisplayName().equals("Beer")) {
-            Player player = event.getPlayer();
-            player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 14 * 20, 2));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 14 * 20, 0));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10 * 20, 0));
+        if (item != null && item.getType() == Material.POTION) {
+            PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
+            if (potionMeta.hasCustomEffect(PotionEffectType.CONFUSION)) {
+                Player player = event.getPlayer();
+                player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 14 * 20, 2));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 14 * 20, 0));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10 * 20, 0));
+            }
         }
     }
 
-    private ItemStack createBeerItem() {
+    private NamespacedKey beerPotionKey;
+
+    private ItemStack createBeerItem(NamespacedKey beerKey) {
+        beerPotionKey = new NamespacedKey(this, "beer_potion");
         ItemStack beer = new ItemStack(Material.POTION);
         PotionMeta potionMeta = (PotionMeta) beer.getItemMeta();
         potionMeta.setColor(Color.YELLOW);
+        potionMeta.setDisplayName("Cerveja");
         potionMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+        potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.CONFUSION, 14 * 20, 2), true);
+        potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.WEAKNESS, 14 * 20, 0), true);
+        potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.SLOW, 10 * 20, 0), true);
         beer.setItemMeta(potionMeta);
-        ItemMeta meta = beer.getItemMeta();
-        meta.setDisplayName("Beer");
-        beer.setItemMeta(meta);
         return beer;
-    }
-
-    private PotionEffect createPotionEffect(PotionEffectType type, int duration) {
-        return new PotionEffect(type, duration, 0, false, false);
     }
 }
