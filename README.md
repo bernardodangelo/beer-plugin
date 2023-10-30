@@ -1,7 +1,7 @@
-# Beer plugin for Minecraft 🍺
+# Beer plugin for Minecraft
 
 A simple beer plugin for Minecraft.
 
-## Contact 📞
+## Contact
 
 See my contact information on my [GitHub profile](https://github.com/bernardodangelo).
