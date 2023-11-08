@@ -14,13 +14,19 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.jetbrains.annotations.NotNull;
 
-public final class beer extends JavaPlugin implements Listener {
+public final class beer extends JavaPlugin implements @NotNull Listener {
+
+    private String beerName;
 
     @Override
     public void onEnable() {
         getLogger().info("BeerPlugin has been enabled.");
         getServer().getPluginManager().registerEvents(this, this);
+
+        loadConfig();
 
         NamespacedKey beerKey = new NamespacedKey(this, "beer_recipe");
         ItemStack beer = createBeerItem(beerKey);
@@ -57,12 +63,20 @@ public final class beer extends JavaPlugin implements Listener {
         ItemStack beer = new ItemStack(Material.POTION);
         PotionMeta potionMeta = (PotionMeta) beer.getItemMeta();
         potionMeta.setColor(Color.YELLOW);
-        potionMeta.setDisplayName("Cerveja");
+        potionMeta.setDisplayName(beerName);
         potionMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
         potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.CONFUSION, 14 * 20, 2), true);
         potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.WEAKNESS, 14 * 20, 0), true);
         potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.SLOW, 10 * 20, 0), true);
         beer.setItemMeta(potionMeta);
         return beer;
+    }
+
+    private void loadConfig() {
+        saveDefaultConfig();
+
+        FileConfiguration config = getConfig();
+
+        beerName = config.getString("beer_name");
     }
 }
