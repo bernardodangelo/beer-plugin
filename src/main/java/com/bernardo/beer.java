@@ -23,6 +23,12 @@ import org.jetbrains.annotations.NotNull;
 public final class beer extends JavaPlugin implements @NotNull Listener {
 
     private String beerName;
+    private int confusionDuration;
+    private int weaknessDuration;
+    private int slowDuration;
+    private int confusionAmplifier;
+    private int weaknessAmplifier;
+    private int slowAmplifier;
 
     @Override
     public void onEnable() {
@@ -32,13 +38,15 @@ public final class beer extends JavaPlugin implements @NotNull Listener {
         loadConfig();
 
         NamespacedKey beerKey = new NamespacedKey(this, "beer_recipe");
-        ItemStack beer = createBeerItem(beerKey);
+        ItemStack beer = createBeerItem();
         ShapelessRecipe beerRecipe = new ShapelessRecipe(beerKey, beer);
 
         ItemStack waterBottle = new ItemStack(Material.POTION);
         PotionMeta waterMeta = (PotionMeta) waterBottle.getItemMeta();
-        waterMeta.setBasePotionData(new PotionData(PotionType.WATER));
-        waterBottle.setItemMeta(waterMeta);
+        if (waterMeta != null) {
+            waterMeta.setBasePotionData(new PotionData(PotionType.WATER));
+            waterBottle.setItemMeta(waterMeta);
+        }
 
         beerRecipe.addIngredient(new RecipeChoice.ExactChoice(waterBottle));
         beerRecipe.addIngredient(Material.WHEAT);
@@ -57,31 +65,27 @@ public final class beer extends JavaPlugin implements @NotNull Listener {
         ItemStack item = event.getItem();
         if (item != null && item.getType() == Material.POTION) {
             PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
-            if (potionMeta.hasCustomEffect(PotionEffectType.CONFUSION)) {
+            if (potionMeta != null && potionMeta.hasCustomEffect(PotionEffectType.CONFUSION)) {
                 Player player = event.getPlayer();
-                player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 14 * 20, 2));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 14 * 20, 0));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10 * 20, 0));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, confusionDuration * 20, confusionAmplifier - 1), true);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, weaknessDuration * 20, weaknessAmplifier - 1), true);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, slowDuration * 20, slowAmplifier - 1), true);
             }
         }
     }
 
-    private NamespacedKey beerPotionKey;
-
-    private ItemStack createBeerItem(NamespacedKey beerKey) {
-        beerPotionKey = new NamespacedKey(this, "beer_potion");
+    private ItemStack createBeerItem() {
         ItemStack beer = new ItemStack(Material.POTION);
         PotionMeta potionMeta = (PotionMeta) beer.getItemMeta();
-        potionMeta.setColor(Color.YELLOW);
-
-        // Remove the italic style from the name by using §r
-        potionMeta.setDisplayName("§r" + beerName);
-
-        potionMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-        potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.CONFUSION, 14 * 20, 2), true);
-        potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.WEAKNESS, 14 * 20, 0), true);
-        potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.SLOW, 10 * 20, 0), true);
-        beer.setItemMeta(potionMeta);
+        if (potionMeta != null) {
+            potionMeta.setColor(Color.YELLOW);
+            potionMeta.setDisplayName("§r" + beerName);
+            potionMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+            potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.CONFUSION, confusionDuration * 20, confusionAmplifier - 1), true);
+            potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.WEAKNESS, weaknessDuration * 20, weaknessAmplifier - 1), true);
+            potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.SLOW, slowDuration * 20, slowAmplifier - 1), true);
+            beer.setItemMeta(potionMeta);
+        }
         return beer;
     }
 
@@ -90,6 +94,12 @@ public final class beer extends JavaPlugin implements @NotNull Listener {
 
         FileConfiguration config = getConfig();
 
-        beerName = config.getString("beer_name");
+        beerName = config.getString("beer_name", "Beer");
+        confusionDuration = config.getInt("nausea_duration", 14);
+        weaknessDuration = config.getInt("weakness_duration", 14);
+        slowDuration = config.getInt("slowness_duration", 10);
+        confusionAmplifier = config.getInt("nausea_amplifier", 2);
+        weaknessAmplifier = config.getInt("weakness_amplifier", 0);
+        slowAmplifier = config.getInt("slowness_amplifier", 0);
     }
 }
