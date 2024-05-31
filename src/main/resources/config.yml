@@ -1,7 +1,9 @@
 beer_name: "Beer"
+
 nausea_duration: 10
 weakness_duration: 10
 slowness_duration: 10
+
 nausea_amplifier: 3
-weakness_amplifier: 0
-slowness_amplifier: 0
+weakness_amplifier: 1
+slowness_amplifier: 1
