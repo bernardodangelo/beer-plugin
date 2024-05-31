@@ -1,6 +1,10 @@
-# Beer plugin for Minecraft
+# Beer Plugin
 
-A simple beer plugin for Minecraft.
+A simple plugin for Minecraft.
+
+## Modrinth
+
+Check out the plugin on [Modrinth](https://modrinth.com/plugin/simple-beer).
 
 ## Contact
 
