@@ -26,7 +26,7 @@ slowness_amplifier: 0
 
 ## Modrinth
 
-Check out the plugin in [Modrinth](https://modrinth.com/plugin/simple-beer).
+Check out the plugin at [Modrinth](https://modrinth.com/plugin/simple-beer).
 
 ## Contact
 
