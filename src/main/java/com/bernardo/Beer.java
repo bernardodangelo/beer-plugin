@@ -1,8 +1,12 @@
 package com.bernardo;
 
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,7 +24,7 @@ import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
 
-public final class beer extends JavaPlugin implements @NotNull Listener {
+public final class Beer extends JavaPlugin implements @NotNull Listener, TabExecutor {
 
     private String beerName;
     private int confusionDuration;
@@ -34,6 +38,7 @@ public final class beer extends JavaPlugin implements @NotNull Listener {
     public void onEnable() {
         getLogger().info("Beer enabled.");
         getServer().getPluginManager().registerEvents(this, this);
+        getCommand("beer").setExecutor(this);
 
         loadConfig();
 
@@ -68,11 +73,12 @@ public final class beer extends JavaPlugin implements @NotNull Listener {
             if (potionMeta != null && potionMeta.hasCustomEffect(PotionEffectType.CONFUSION)) {
                 Player player = event.getPlayer();
                 player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, confusionDuration * 20, confusionAmplifier - 1), true);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, weaknessDuration * 20, weaknessAmplifier - 1), true);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, weaknessDuration * 20, weaknessAmplifier -1), true);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, slowDuration * 20, slowAmplifier - 1), true);
             }
         }
     }
+
 
     private ItemStack createBeerItem() {
         ItemStack beer = new ItemStack(Material.POTION);
@@ -101,5 +107,18 @@ public final class beer extends JavaPlugin implements @NotNull Listener {
         confusionAmplifier = config.getInt("nausea_amplifier", 2);
         weaknessAmplifier = config.getInt("weakness_amplifier", 0);
         slowAmplifier = config.getInt("slowness_amplifier", 0);
+    }
+
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (command.getName().equalsIgnoreCase("beer")) {
+            if (args.length > 0 && args[0].equalsIgnoreCase("reload")) {
+                reloadConfig();
+                loadConfig();
+                sender.sendMessage(ChatColor.YELLOW + "[Beer]" + ChatColor.WHITE + " Config reloaded.");
+                return true;
+            }
+        }
+        return false;
     }
 }
