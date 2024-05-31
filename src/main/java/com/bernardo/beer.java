@@ -63,7 +63,7 @@ public final class beer extends JavaPlugin implements @NotNull Listener {
         ItemStack beer = new ItemStack(Material.POTION);
         PotionMeta potionMeta = (PotionMeta) beer.getItemMeta();
         potionMeta.setColor(Color.YELLOW);
-        potionMeta.setDisplayName(beerName);
+        potionMeta.setDisplayName("§r" + beerName);
         potionMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
         potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.CONFUSION, 14 * 20, 2), true);
         potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.WEAKNESS, 14 * 20, 0), true);
