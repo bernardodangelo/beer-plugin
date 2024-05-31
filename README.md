@@ -24,9 +24,9 @@ slowness_amplifier: 0
 
 ![Effects](https://cdn.modrinth.com/data/cached_images/63c39b065841345ee78b103d726c5ab52c69e517.png)
 
-## Notes
+## Modrinth
 
-I haven't tested this plugin in older versions, but it might work.
+Check out the plugin in [Modrinth](https://modrinth.com/plugin/simple-beer).
 
 ## Contact
 
