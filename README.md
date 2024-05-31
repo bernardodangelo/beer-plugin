@@ -16,7 +16,6 @@ weakness_amplifier: 0
 slowness_amplifier: 0
 ```
 
-
 ## Recipe
 
 ![Crafting](https://cdn.modrinth.com/data/cached_images/a46a5b8d9627b09b5a6506257c2517e044559879.png)
@@ -28,3 +27,7 @@ slowness_amplifier: 0
 ## Notes
 
 I haven't tested this plugin in older versions, but it might work.
+
+## Contact
+
+See my contact information on my [GitHub profile](https://github.com/bernardodangelo).
