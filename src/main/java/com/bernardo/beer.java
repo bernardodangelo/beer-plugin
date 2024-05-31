@@ -14,6 +14,9 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionType;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +26,7 @@ public final class beer extends JavaPlugin implements @NotNull Listener {
 
     @Override
     public void onEnable() {
-        getLogger().info("BeerPlugin has been enabled.");
+        getLogger().info("Beer enabled.");
         getServer().getPluginManager().registerEvents(this, this);
 
         loadConfig();
@@ -31,15 +34,22 @@ public final class beer extends JavaPlugin implements @NotNull Listener {
         NamespacedKey beerKey = new NamespacedKey(this, "beer_recipe");
         ItemStack beer = createBeerItem(beerKey);
         ShapelessRecipe beerRecipe = new ShapelessRecipe(beerKey, beer);
-        beerRecipe.addIngredient(Material.POTION);
+
+        ItemStack waterBottle = new ItemStack(Material.POTION);
+        PotionMeta waterMeta = (PotionMeta) waterBottle.getItemMeta();
+        waterMeta.setBasePotionData(new PotionData(PotionType.WATER));
+        waterBottle.setItemMeta(waterMeta);
+
+        beerRecipe.addIngredient(new RecipeChoice.ExactChoice(waterBottle));
         beerRecipe.addIngredient(Material.WHEAT);
         beerRecipe.addIngredient(Material.FERMENTED_SPIDER_EYE);
+
         getServer().addRecipe(beerRecipe);
     }
 
     @Override
     public void onDisable() {
-        getLogger().info("BeerPlugin has been disabled.");
+        getLogger().info("Beer disabled.");
     }
 
     @EventHandler
@@ -63,7 +73,10 @@ public final class beer extends JavaPlugin implements @NotNull Listener {
         ItemStack beer = new ItemStack(Material.POTION);
         PotionMeta potionMeta = (PotionMeta) beer.getItemMeta();
         potionMeta.setColor(Color.YELLOW);
+
+        // Remove the italic style from the name by using §r
         potionMeta.setDisplayName("§r" + beerName);
+
         potionMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
         potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.CONFUSION, 14 * 20, 2), true);
         potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.WEAKNESS, 14 * 20, 0), true);
